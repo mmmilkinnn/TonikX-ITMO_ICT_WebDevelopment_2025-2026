@@ -641,10 +641,15 @@
         <span class="k">return</span> <span class="n">headers</span>
 
     <span class="c1"># собираем HTML: строки таблицы из self.grades + вставка в шаблон index.html</span>
-    <span class="k">def</span> <span class="nf">build_html</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grades</span><span class="p">:</span>
-            <span class="n">rows</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;tr&gt;&lt;td&gt;</span><span class="si">{</span><span class="n">subj</span><span class="si">}</span><span class="s2">&lt;/td&gt;&lt;td&gt;</span><span class="si">{</span><span class="n">gr</span><span class="si">}</span><span class="s2">&lt;/td&gt;&lt;/tr&gt;&quot;</span>
-                             <span class="k">for</span> <span class="n">subj</span><span class="p">,</span> <span class="n">gr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grades</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">build_html</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_grades</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;tr&gt;&lt;td&gt;</span><span class="si">{</span><span class="n">subj</span><span class="si">}</span><span class="s2">&lt;/td&gt;&lt;td&gt;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">grs</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/td&gt;&lt;/tr&gt;&quot;</span>
+                <span class="k">for</span> <span class="n">subj</span><span class="p">,</span> <span class="n">grs</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="s2">&quot;&lt;tr&gt;&lt;td colspan=&#39;2&#39;&gt;Пока пусто&lt;/td&gt;&lt;/tr&gt;&quot;</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;index.html&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">html</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -732,7 +737,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Stopped&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="indexhtml"><code>index.html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="cp">&lt;!doctype html&gt;</span>
+<p><div class="highlight"><pre><span></span><code><span class="cp">&lt;!doctype html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ru&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
@@ -768,8 +773,8 @@
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></div>
-<p><img alt="alt text" src="../report.jpg" /></p>
-<p>Реализован минимальный HTTP-сервер на сокетах, который принимает данные через POST, сохраняет их и по GET отдаёт HTML-страницу со всеми оценками. Записи хранятся в файле <code>grades.txt</code>, шаблон <code>index.html</code> наполняется на лету, формы корректно разбираются (URL-кодирование, UTF-8). Решение полностью соответствует требованиям задания: есть обработка методов, заголовков и тела запроса, а также генерация корректного ответа.</p>
+<img alt="alt text" src="../image-2.png" />
+Реализован минимальный HTTP-сервер на сокетах, который принимает данные через POST, сохраняет их и по GET отдаёт HTML-страницу со всеми оценками. Записи хранятся в файле <code>grades.txt</code>, шаблон <code>index.html</code> наполняется на лету, формы корректно разбираются (URL-кодирование, UTF-8). Решение полностью соответствует требованиям задания: есть обработка методов, заголовков и тела запроса, а также генерация корректного ответа.</p>
 
 
 
