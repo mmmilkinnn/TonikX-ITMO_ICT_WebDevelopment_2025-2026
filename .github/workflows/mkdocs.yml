@@ -16,5 +16,4 @@ jobs:
         with:
           python-version: '3.x'
       - run: pip install mkdocs mkdocs-material
-      # КЛЮЧЕВОЕ: указываем путь к ТВОЕМУ конфигу
       - run: mkdocs -f students/k3339/Markozubova_Anastasia/mkdocs.yml gh-deploy --force
