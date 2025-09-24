@@ -1,4 +1,4 @@
-name: Deploy MkDocs (personal folder)
+name: Deploy MkDocs (personal folder) 
 
 on:
   push:
