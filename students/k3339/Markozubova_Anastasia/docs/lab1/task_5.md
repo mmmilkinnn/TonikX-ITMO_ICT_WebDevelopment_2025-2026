@@ -137,17 +137,22 @@ class MyHTTPServer:
         return headers
 
     # собираем HTML: строки таблицы из self.grades + вставка в шаблон index.html
-    def build_html(self) -> bytes:
-        if self.grades:
-            rows = "\n".join(f"<tr><td>{subj}</td><td>{gr}</td></tr>"
-                             for subj, gr in self.grades)
+        def build_html(self) -> bytes:
+        groups = self.group_grades()
+        if groups:
+            rows = "\n".join(
+                f"<tr><td>{subj}</td><td>{', '.join(grs)}</td></tr>"
+                for subj, grs in groups.items()
+            )
+        else:
+            rows = "<tr><td colspan='2'>Пока пусто</td></tr>"
 
         with open("index.html", "r", encoding="utf-8") as f:
             html = f.read()
 
         html = html.replace("{{ROWS}}", rows)
         return html.encode("utf-8")
-
+        
     # простой роутинг: GET /, GET /download, POST /add, иначе 404
     def handle_request(self, conn, method, path, headers, body):
         if "?" in path:
@@ -265,7 +270,5 @@ if __name__ == "__main__":
 </body>
 </html>
 ```
-
-![alt text](report.jpg)
-
+![alt text](image-2.png)
 Реализован минимальный HTTP-сервер на сокетах, который принимает данные через POST, сохраняет их и по GET отдаёт HTML-страницу со всеми оценками. Записи хранятся в файле `grades.txt`, шаблон `index.html` наполняется на лету, формы корректно разбираются (URL-кодирование, UTF-8). Решение полностью соответствует требованиям задания: есть обработка методов, заголовков и тела запроса, а также генерация корректного ответа.
