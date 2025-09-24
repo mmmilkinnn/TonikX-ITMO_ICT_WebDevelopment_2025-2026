@@ -116,10 +116,21 @@ class MyHTTPServer:
                 headers[name.strip().lower()] = value.strip()
         return headers
 
+    def group_grades(self) -> dict[str, list[str]]:
+        groups = {}
+        for subj, gr in self.grades:
+            groups.setdefault(subj, []).append(gr)
+        return groups
+
     def build_html(self) -> bytes:
-        if self.grades:
-            rows = "\n".join(f"<tr><td>{subj}</td><td>{gr}</td></tr>"
-                             for subj, gr in self.grades)
+        groups = self.group_grades()
+        if groups:
+            rows = "\n".join(
+                f"<tr><td>{subj}</td><td>{', '.join(grs)}</td></tr>"
+                for subj, grs in groups.items()
+            )
+        else:
+            rows = "<tr><td colspan='2'>Пока пусто</td></tr>"
 
         with open("index.html", "r", encoding="utf-8") as f:
             html = f.read()
