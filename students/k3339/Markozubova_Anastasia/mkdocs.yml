@@ -14,11 +14,15 @@ nav:
     - Задание 5: lab1/task_5.md
   - Лабораторная работа №2:
       - Отчет: lab2/report.md
+  - Лабораторная работа №3:
+      - Отчет: lab3/report.md
+      
  
 markdown_extensions:
   - codehilite
   - pymdownx.highlight
   - pymdownx.superfences
+
 
 
 
