@@ -16,11 +16,13 @@ nav:
       - Отчет: lab2/report.md
   - Лабораторная работа №3:
       - Отчет: lab3/report.md
- 
+  - Лабораторная работа №4:
+      - Отчет: lab4/report.md
 markdown_extensions:
   - codehilite
   - pymdownx.highlight
   - pymdownx.superfences
+
 
 
 
